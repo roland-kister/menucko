@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "feature/github-action-build" ]
   pull_request:
     branches: [ "main" ]
 
