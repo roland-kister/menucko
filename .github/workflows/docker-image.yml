@@ -2,7 +2,7 @@ name: 'Build,  publish  and deploy "menucko" to Azure'
 
 on:
   push:
-    branches: [ "main", "feature/github-action-build" ]
+    branches: [ "main", "fix/github-action-variable" ]
   pull_request:
     branches: [ "main" ]
 
