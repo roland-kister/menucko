@@ -32,7 +32,7 @@ jobs:
         output: static-minified/
 
     - name: Rename minifies styles.min.css to styles.css
-      run: mv static-minified/styles.min.css static-minified/styles.css
+      run: ls -al static-minified; mv static-minified/styles.min.css static-minified/styles.css
      
     - name: Upload minified styles.css
       uses: LanceMcCarthy/Action-AzureBlobUpload@v2
