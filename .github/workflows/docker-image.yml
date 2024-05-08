@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: 'Build and publish "menucko"'
 
 on:
   push:
@@ -24,13 +24,17 @@ jobs:
         go-version: "1.21"
         cache-dependency-path: src/go.sum
     
-    - name: Download menucko Go dependencies
+    - name: Download Go dependencies
       run: make tidy
       working-directory: src
           
-    - name: Build menucko binary
+    - name: Build the binary
       run: make build
       working-directory: src
     
-    # - name: Build the Docker image
-    #   run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    - name: Build the Docker image
+      run: make build
+      working-directory: src
+    
+    - name: Build the Docker image
+      run: docker build --file ./docker/Dockerfile --tag rolandkister/menucko:latest  .
