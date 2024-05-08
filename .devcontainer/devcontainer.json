@@ -1,0 +1,14 @@
+{
+	"name": "Menucko Dev Container",
+	"image": "mcr.microsoft.com/devcontainers/go:1-1.22-bookworm",
+	"postCreateCommand": "sudo apt update; sudo apt install -y libtesseract-dev tesseract-ocr-slk poppler-utils",
+	"containerEnv": {
+		"MENUCKO_WEEKDAY": "1",
+		"MENUCKO_HTML_TEMPLATE": "../static/template.html",
+		"MENUCKO_STYLES_PATH": "styles.css",
+		"MENUCKO_COMMIT_HASH": "local-dev",
+		"MENUCKO_BLOB_CONN_STR": "local",
+		"MENUCKO_BLOB_CONT_NAME": "../tmp/web",
+		"MENUCKO_BLOB_NAME": "index.html"
+	}
+}

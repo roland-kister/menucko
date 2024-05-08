@@ -19,3 +19,6 @@
 
 # Go workspace file
 go.work
+
+# tmp directory used for local development
+tmp/

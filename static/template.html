@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <title>Menučko</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ .StylesPath }}?v={{ .CommitHash }}">
+</head>
+<body>
+    <main>
+        <h1>{{ .DayName }}</h1>
+        {{ range .Menus }}
+            <article>
+                <h2>
+                    {{ if eq .Restaurant 0 }}
+                        Pizza Pizza
+                    {{ else if eq .Restaurant 1 }}
+                        Lindy Hop
+                    {{ else if eq .Restaurant 2 }}
+                        Kozel Tank Pub
+                    {{ else if eq .Restaurant 3 }}
+                        Bowling Erika
+                    {{ end }}
+                </h2>
+                {{ if not .Meals }}
+                    <p>Nepodarilo sa načítať menu</p>
+                    {{ continue }}
+                {{ end }}
+                {{ range .Meals }}
+                    <section>
+                        <h3>{{ .Name }} - {{ .Price }}</h3>
+                        {{ range .Dishes }}
+                            <p>{{ . }}</p>
+                        {{ end }}
+                    </section>
+                {{ end }}
+            </article>
+        {{ end }}
+        <footer>
+            <p>Posledná aktualizácia: {{ .ExecutionTime }}</p>
+            <p>Commit SHA: {{ .CommitHash }}</p>
+        </footer>
+    </main>
+</body>
+</html>
