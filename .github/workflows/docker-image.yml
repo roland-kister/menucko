@@ -23,18 +23,17 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    
-    - name: Setup Go environment
-      uses: actions/setup-go@v5.0.1
-      with:
-        go-version: "1.21"
-        cache-dependency-path: src/go.sum
-    
         
-    - name: Upload styles file
+    - name: Minify styles.css
+      uses: nizarmah/auto-minify@v3
+      with:
+        directory: static/
+        output: static-minified/
+     
+    - name: Upload minified styles.css
       uses: LanceMcCarthy/Action-AzureBlobUpload@v2
       with:
         connection_string: ${{ secrets.BLOB_CONNECTION_STRING }}
         container_name: "$web"
-        source_folder: static/styles.css
+        source_folder: static-minified/styles.css
         destination_folder: /
