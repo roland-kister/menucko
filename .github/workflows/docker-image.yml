@@ -31,13 +31,13 @@ jobs:
         directory: static/
         output: static-minified/
 
-    - name: Rename minifies styles.min.css to styles.css
-      run: chmod +w static-minified; ls -al static-minified; mv static-minified/styles.min.css static-minified/styles.css
+    - name: Move and rename minified styles.min.css
+      run: cp static-minified/styles.min.css ./styles.css
      
     - name: Upload minified styles.css
       uses: LanceMcCarthy/Action-AzureBlobUpload@v2
       with:
         connection_string: ${{ secrets.BLOB_CONNECTION_STRING }}
         container_name: "$web"
-        source_folder: static-minified/styles.css
+        source_folder: ./styles.css
         destination_folder: /
