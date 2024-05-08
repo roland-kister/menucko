@@ -1,0 +1,54 @@
+name: 'Build,  publish  and deploy "menucko" to Azure'
+
+on:
+  push:
+    branches: [ "main", "feature/github-action-build" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    name: Build and publish Docker image
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        
+    - name: Build and push
+      uses: docker/build-push-action@v5
+      with:
+        file: ./docker/Dockerfile
+        push: true
+        tags: rolandkister/menucko:latest
+        build-args: |
+          commit=${GITHUB_SHA}
+
+  styles:
+    name: Minify and upload styles.css
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+        
+    - name: Minify styles.css
+      uses: nizarmah/auto-minify@v3
+      with:
+        directory: static/
+        output: static-minified/
+
+    - name: Move and rename minified styles.min.css
+      run: cp static-minified/styles.min.css ./styles.css
+     
+    - name: Upload minified styles.css
+      uses: LanceMcCarthy/Action-AzureBlobUpload@v2
+      with:
+        connection_string: ${{ secrets.BLOB_CONNECTION_STRING }}
+        container_name: "$web"
+        source_folder: ./styles.css
