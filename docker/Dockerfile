@@ -14,6 +14,8 @@ RUN make build
 # App Stage
 FROM alpine:3.19
 
+ARG commit
+
 RUN apk add --no-cache --no-progress tesseract-ocr tesseract-ocr-data-slk poppler-utils
 
 COPY --from=build ../tmp/menucko /app/menucko
@@ -21,5 +23,7 @@ COPY --from=build ../tmp/menucko /app/menucko
 ADD ./static /app/static
 
 WORKDIR /app
+
+ENV MENUCKO_COMMIT_HASH=$commit
 
 ENTRYPOINT ./menucko
