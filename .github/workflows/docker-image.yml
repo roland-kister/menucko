@@ -1,4 +1,4 @@
-name: 'Build and publish "menucko"'
+name: 'Build,  publish  and deploy "menucko" to Azure'
 
 on:
   push:
@@ -9,32 +9,32 @@ on:
 jobs:
 
   build:
-
+    name: Build and publish Docker image
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
     
-    - name: Install build dependencies
-      run: sudo apt-get -qq install -y libtesseract-dev
+    - name: Build the Docker image
+      run: docker build --file ./docker/Dockerfile --tag rolandkister/menucko:latest  .
 
+  styles:
+    name: Minify and upload styles.css
+    runs-on: ubuntu-latest
+    
+    steps:
+    
     - name: Setup Go environment
       uses: actions/setup-go@v5.0.1
       with:
         go-version: "1.21"
         cache-dependency-path: src/go.sum
     
-    - name: Download Go dependencies
-      run: make tidy
-      working-directory: src
-          
-    - name: Build the binary
-      run: make build
-      working-directory: src
-    
-    - name: Build the Docker image
-      run: make build
-      working-directory: src
-    
-    - name: Build the Docker image
-      run: docker build --file ./docker/Dockerfile --tag rolandkister/menucko:latest  .
+        
+    - name: Upload styles file
+      uses: LanceMcCarthy/Action-AzureBlobUpload@v2
+      with:
+        connection_string: ${{ secrets.BLOB_CONNECTION_STRING }}
+        container_name: "$web"
+        source_folder: static/styles.css
+        destination_folder: /
