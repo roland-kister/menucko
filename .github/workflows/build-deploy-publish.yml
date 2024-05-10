@@ -1,9 +1,7 @@
-name: 'Build,  publish  and deploy "menucko" to Azure'
+name: 'Build, publish and deploy "menucko" to Azure'
 
 on:
   push:
-    branches: [ "main", "fix/github-action-variable" ]
-  pull_request:
     branches: [ "main" ]
 
 jobs:
@@ -28,7 +26,7 @@ jobs:
         push: true
         tags: rolandkister/menucko:latest
         build-args: |
-          commit=${GITHUB_SHA}
+          commit=$GITHUB_SHA
 
   styles:
     name: Minify and upload styles.css
