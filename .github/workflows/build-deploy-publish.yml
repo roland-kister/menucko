@@ -26,7 +26,8 @@ jobs:
         push: true
         tags: rolandkister/menucko:latest
         build-args: |
-          commit=$GITHUB_SHA
+          commit=${{ vars.GITHUB_SHA }}
+
 
   styles:
     name: Minify and upload styles.css
