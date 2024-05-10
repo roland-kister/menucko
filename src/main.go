@@ -3,7 +3,8 @@ package main
 import (
 	"log"
 	"menucko/restaurants"
-	"menucko/util"
+	"menucko/services/httpclient"
+	"menucko/services/imageocr"
 	"sync"
 )
 
@@ -14,8 +15,8 @@ func main() {
 		return
 	}
 
-	httpClient := util.ProdHTTPClient{}
-	imageOcr := util.ProdImageOcr{}
+	httpClient := httpclient.ProdHTTPClient{}
+	imageOcr := imageocr.ProdImageOcr{}
 
 	rend, err := getRenderer()
 	if err != nil {

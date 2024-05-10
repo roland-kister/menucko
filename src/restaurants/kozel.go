@@ -5,7 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"menucko/util"
+	"menucko/services/dateresolver"
+	"menucko/services/httpclient"
 	"runtime/debug"
 	"strings"
 	"sync"
@@ -17,14 +18,12 @@ import (
 const kozelLogPrefix = "[Kozel]"
 const kozelURL = "http://kozeltankpub.sk/obedove-menu/"
 
-var kozelDayNames = [...]string{"nedela", "pondelok", "utorok", "streda", "stvrtok", "piatok", "sobota"}
-
 type KozelParser struct {
-	dateResolver util.DateResolver
-	httpClient   util.HTTPClient
+	dateResolver dateresolver.DateResolver
+	httpClient   httpclient.HTTPClient
 }
 
-func ParseKozel(menuChan chan Menu, waitGroup *sync.WaitGroup, dateResolver util.DateResolver, httpClient util.HTTPClient) {
+func ParseKozel(menuChan chan Menu, waitGroup *sync.WaitGroup, dateResolver dateresolver.DateResolver, httpClient httpclient.HTTPClient) {
 	parser := KozelParser{
 		dateResolver: dateResolver,
 		httpClient:   httpClient,
@@ -135,7 +134,7 @@ func (parser KozelParser) findDailyMenuEl(rootNode *html.Node) (*html.Node, erro
 		return nil, errors.New("daily menu CSS selector didn't match any element")
 	}
 
-	kozelDayName := kozelDayNames[parser.dateResolver.Weekday()+1]
+	kozelDayName := strings.ToLower(parser.dateResolver.SlovakWeekday())
 
 	parser.log("Looking for today's daily menu element for day \"%s\"", kozelDayName)
 

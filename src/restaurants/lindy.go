@@ -4,7 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"menucko/util"
+	"menucko/services/httpclient"
+	"menucko/services/imageocr"
 	"regexp"
 	"runtime/debug"
 	"strings"
@@ -18,11 +19,11 @@ const lindyLogPrefix = "[Lindy]"
 const lindyURL = "http://www.lindyhop.sk/"
 
 type LindyParser struct {
-	httpClient util.HTTPClient
-	imageOcr   util.ImageOcr
+	httpClient httpclient.HTTPClient
+	imageOcr   imageocr.ImageOcr
 }
 
-func ParseLindy(menuChan chan Menu, waitGroup *sync.WaitGroup, httpClient util.HTTPClient, imageOcr util.ImageOcr) {
+func ParseLindy(menuChan chan Menu, waitGroup *sync.WaitGroup, httpClient httpclient.HTTPClient, imageOcr imageocr.ImageOcr) {
 	parser := LindyParser{
 		httpClient: httpClient,
 		imageOcr:   imageOcr,

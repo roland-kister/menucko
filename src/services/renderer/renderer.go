@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"menucko/restaurants"
+	"menucko/services/dateresolver"
 	"time"
 	_ "time/tzdata"
 
@@ -16,14 +17,13 @@ import (
 const htmlRendererLogPrefix = "[HTML Renderer]"
 const rendererFatalErrPage = "<!doctype html><html lang=sk><h1>Fatal Error</h1>"
 
-var slovakDays = [...]string{"Nedeľa", "Pondelok", "Utorok", "Streda", "Štvrtok", "Piatok", "Sobota"}
-
 type Renderer interface {
 	RenderMenus(menus *[]restaurants.Menu) (*bytes.Buffer, error)
 	GetErrorContent() *bytes.Buffer
 }
 
 type HTMLRenderer struct {
+	DateResolver     dateresolver.DateResolver
 	TemplateFilePath string
 	StylesPath       string
 	CommitHash       string
@@ -59,7 +59,7 @@ func (r HTMLRenderer) RenderMenus(menus *[]restaurants.Menu) (*bytes.Buffer, err
 		StylesPath:    r.StylesPath,
 		CommitHash:    r.CommitHash,
 		ExecutionTime: currentTime.Format("15:04 2.1.2006"),
-		DayName:       slovakDays[currentTime.Weekday()],
+		DayName:       r.DateResolver.SlovakWeekday(),
 	}
 
 	r.log("Rendering HTML content")
