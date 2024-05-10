@@ -1,9 +1,10 @@
-package util
+package dateresolver
 
 import "time"
 
 type DateResolver interface {
 	Weekday() int
+	SlovakWeekday() string
 }
 
 type DevDateResolver struct {
@@ -13,6 +14,12 @@ type DevDateResolver struct {
 func (resolver DevDateResolver) Weekday() int {
 	return resolver.WeekdayVal
 }
+
+func (resolver DevDateResolver) SlovakWeekday() string {
+	return slovakDays[resolver.Weekday()]
+}
+
+var slovakDays = [...]string{"Pondelok", "Utorok", "Streda", "Štvrtok", "Piatok", "Sobota", "Nedeľa"}
 
 type ProdDateResolver struct{}
 
@@ -26,4 +33,8 @@ func (ProdDateResolver) Weekday() int {
 	}
 
 	return int(weekday)
+}
+
+func (resolver ProdDateResolver) SlovakWeekday() string {
+	return slovakDays[resolver.Weekday()]
 }

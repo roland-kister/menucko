@@ -5,7 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"menucko/util"
+	"menucko/services/dateresolver"
+	"menucko/services/httpclient"
 	"runtime/debug"
 	"strings"
 	"sync"
@@ -18,11 +19,11 @@ const pizzaLogPrefix = "[Pizza]"
 const pizzaURL = "https://www.pizza-pizza.sk/menu---terasa"
 
 type PizzaParser struct {
-	dateResolver util.DateResolver
-	httpClient   util.HTTPClient
+	dateResolver dateresolver.DateResolver
+	httpClient   httpclient.HTTPClient
 }
 
-func ParsePizza(menuChan chan Menu, waitGroup *sync.WaitGroup, dateResolver util.DateResolver, httpClient util.HTTPClient) {
+func ParsePizza(menuChan chan Menu, waitGroup *sync.WaitGroup, dateResolver dateresolver.DateResolver, httpClient httpclient.HTTPClient) {
 	parser := PizzaParser{
 		dateResolver: dateResolver,
 		httpClient:   httpClient,

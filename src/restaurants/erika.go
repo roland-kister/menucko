@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"menucko/util"
+	"menucko/services/httpclient"
 	"os"
 	"os/exec"
 	"regexp"
@@ -22,10 +22,10 @@ const erikaPDF = "erika.pdf"
 const erikaTXT = "erika.txt"
 
 type ErikaParser struct {
-	httpClient util.HTTPClient
+	httpClient httpclient.HTTPClient
 }
 
-func ParseErika(menuChan chan Menu, waitGroup *sync.WaitGroup, httpClient util.HTTPClient) {
+func ParseErika(menuChan chan Menu, waitGroup *sync.WaitGroup, httpClient httpclient.HTTPClient) {
 	parser := ErikaParser{
 		httpClient: httpClient,
 	}

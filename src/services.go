@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"menucko/distributor"
-	"menucko/renderer"
-	"menucko/util"
+	"menucko/services/dateresolver"
+	"menucko/services/distributor"
+	"menucko/services/renderer"
 	"os"
 	"strconv"
 )
@@ -17,11 +17,11 @@ const blobConnStrEnv = "MENUCKO_BLOB_CONN_STR"
 const blobContNameEnv = "MENUCKO_BLOB_CONT_NAME"
 const blobNameEnv = "MENUCKO_BLOB_NAME"
 
-func getDateResolver() (util.DateResolver, error) {
+func getDateResolver() (dateresolver.DateResolver, error) {
 	staticWeekdayStr := os.Getenv(weekdayEnv)
 
 	if len(staticWeekdayStr) == 0 {
-		return util.ProdDateResolver{}, nil
+		return dateresolver.ProdDateResolver{}, nil
 	}
 
 	staticWeekday, err := strconv.Atoi(staticWeekdayStr)
@@ -29,7 +29,7 @@ func getDateResolver() (util.DateResolver, error) {
 		return nil, fmt.Errorf("env \"%s\" with value \"%s\" is not a valid number", weekdayEnv, staticWeekdayStr)
 	}
 
-	return util.DevDateResolver{WeekdayVal: staticWeekday}, nil
+	return dateresolver.DevDateResolver{WeekdayVal: staticWeekday}, nil
 }
 
 func getRenderer() (renderer.Renderer, error) {
@@ -48,7 +48,13 @@ func getRenderer() (renderer.Renderer, error) {
 		return nil, fmt.Errorf("env \"%s\" is empty", commitHashEnv)
 	}
 
+	dateResolver, err := getDateResolver()
+	if err != nil {
+		return nil, err
+	}
+
 	return renderer.HTMLRenderer{
+		DateResolver:     dateResolver,
 		TemplateFilePath: htmlTemplate,
 		StylesPath:       stylesPath,
 		CommitHash:       commitHash,
