@@ -28,7 +28,7 @@ jobs:
         push: ${{ github.ref == 'refs/heads/main' }}
         tags: rolandkister/menucko:latest
         build-args: |
-          commit=${{ vars.GITHUB_SHA }}
+          commit=${{ github.sha }}
 
   styles:
     if: ${{ github.ref == 'refs/heads/main' }}
