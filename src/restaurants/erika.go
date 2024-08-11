@@ -77,7 +77,7 @@ func (parser ErikaParser) parseMenu() (*[]Meal, error) {
 		return nil, err
 	}
 
-	menuPdfLinkSelector := css.MustParse(".elementor-section-items-middle .elementor-button-link")
+	menuPdfLinkSelector := css.MustParse("#denne-menu .elementor-button-link")
 
 	parser.log("Selecting daily menu PDF anchor element with CSS selector")
 
